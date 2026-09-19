@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz 2: Finance & AI Orientation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Colors */
+            --primary-blue: #0066CC;
+            --primary-dark: #003D7A;
+            --success-green: #28A745;
+            --warning-orange: #FF9800;
+            --error-red: #DC3545;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #CCCCCC;
+            --dark-gray: #333333;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #DDDDDD;
+            
+            /* Spacing */
+            --sp-xs: 2px;
+            --sp-s: 4px;
+            --sp-m: 8px;
+            --sp-l: 16px;
+            --sp-xl: 24px;
+            --sp-xxl: 32px;
+            
+            /* Typography */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--sp-l);
+        }
+
+        .container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 700px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: var(--light-gray);
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--sp-xl);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .progress-fill {
+            height: 4px;
+            background: var(--primary-blue);
+            margin-top: var(--sp-m);
+        }
+
+        /* Header */
+        .page-header {
+            padding: var(--sp-xxl) var(--sp-xl);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin-bottom: var(--sp-s);
+            display: flex;
+            align-items: center;
+            gap: var(--sp-m);
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: var(--sp-xxl);
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-icon {
+            font-size: 64px;
+            margin-bottom: var(--sp-l);
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: var(--sp-m);
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            margin-bottom: var(--sp-xl);
+            opacity: 0.9;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: var(--sp-xl);
+            font-size: 14px;
+            margin-bottom: var(--sp-xl);
+        }
+
+        /* Content */
+        .page-content {
+            padding: var(--sp-xl);
+        }
+
+        /* Form Group */
+        .form-group {
+            margin-bottom: var(--sp-l);
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: var(--sp-m);
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error-red);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: var(--font-family);
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        input[type="text"]:disabled,
+        select:disabled {
+            background: var(--light-gray);
+            color: var(--medium-gray);
+            cursor: not-allowed;
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: var(--sp-s);
+        }
+
+        /* Radio/Checkbox */
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-m);
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: var(--sp-m);
+            padding: var(--sp-m);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .radio-item:hover,
+        .checkbox-item:hover {
+            background: var(--light-gray);
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            cursor: pointer;
+            accent-color: var(--primary-blue);
+        }
+
+        /* Question Card */
+        .question-card {
+            background: var(--light-gray);
+            padding: var(--sp-l);
+            border-radius: 8px;
+            margin-bottom: var(--sp-xl);
+        }
+
+        .question-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: var(--sp-l);
+        }
+
+        /* Success Card */
+        .success-card {
+            background: #F0F7FF;
+            border-left: 4px solid var(--success-green);
+            border-radius: 8px;
+            padding: var(--sp-xxl);
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: var(--sp-l);
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin-bottom: var(--sp-m);
+        }
+
+        .success-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .next-steps {
+            margin-top: var(--sp-xl);
+            padding-top: var(--sp-xl);
+            border-top: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .next-steps h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: var(--sp-m);
+        }
+
+        .next-steps p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--sp-m);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: var(--sp-l);
+            justify-content: space-between;
+            padding: var(--sp-xl);
+            border-top: 1px solid var(--border-color);
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            font-family: var(--font-family);
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--primary-blue);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .btn-success {
+            background: var(--success-green);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+
+        .btn-disabled {
+            background: var(--medium-gray);
+            color: var(--white);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .hero-title {
+                font-size: 24px;
+            }
+
+            .hero-meta {
+                flex-direction: column;
+                gap: var(--sp-m);
+            }
+
+            .page-content {
+                padding: var(--sp-l) var(--sp-m);
+            }
+        }
+
+        /* Mattermost Card Preview */
+        .mattermost-card {
+            background: var(--white);
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 4px;
+            padding: var(--sp-l);
+            margin-top: var(--sp-l);
+            font-family: monospace;
+            font-size: 12px;
+            background: #f8f8f8;
+        }
+
+        .mattermost-title {
+            font-weight: 600;
+            margin-bottom: var(--sp-m);
+            font-size: 13px;
+        }
+
+        .mattermost-field {
+            margin-bottom: var(--sp-s);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- PAGE 1: Welcome -->
+        <div class="page active">
+            <div class="hero-banner">
+                <div class="hero-icon">📚</div>
+                <div class="hero-title">Finance & AI Orientation</div>
+                <div class="hero-subtitle">Complete this quiz to test your knowledge</div>
+                <div class="hero-meta">
+                    <div>⏱️ Estimated Time: 5 mins</div>
+                    <div>📋 Questions: 10</div>
+                </div>
+            </div>
+            <div class="page-content">
+                <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--sp-l);">
+                    Welcome! This orientation quiz will help you understand key concepts in Finance, AI, and business fundamentals. 
+                    The quiz consists of 10 questions covering topics relevant to your internship track.
+                </p>
+                <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+                    ✅ Your responses will be securely saved  
+                    ✅ Automated scoring will be applied  
+                    ✅ Results will be posted to Mattermost
+                </p>
+            </div>
+            <div class="button-group">
+                <div></div>
+                <button class="btn-primary" onclick="goToPage(2)">START QUIZ →</button>
+            </div>
+        </div>
+
+        <!-- PAGE 2: Personal Information -->
+        <div class="page">
+            <div class="progress-bar">
+                📝 Step 1 of 3 — 33% Complete
+            </div>
+            <div class="page-header">
+                <div class="page-title">📝 YOUR INFORMATION</div>
+                <div class="page-subtitle">Help us know who you are</div>
+            </div>
+            <div class="page-content">
+                <div class="form-group">
+                    <label for="firstName" class="required">First Name</label>
+                    <input type="text" id="firstName" placeholder="John">
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName" class="required">Last Name</label>
+                    <input type="text" id="lastName" placeholder="Doe">
+                </div>
+
+                <div class="form-group">
+                    <label for="schoolEmail" class="required">School Email</label>
+                    <input type="email" id="schoolEmail" placeholder="john@school.com">
+                    <div class="helper-text">Format: name@school.com</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="personalEmail" class="required">Personal Email</label>
+                    <input type="email" id="personalEmail" placeholder="john@personal.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="schoolName" class="required">School Name</label>
+                    <select id="schoolName">
+                        <option value="">-- Select School --</option>
+                        <option value="altschool">Altschool Africa</option>
+                        <option value="aui">American University</option>
+                        <option value="mit">MIT</option>
+                        <option value="stanford">Stanford</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="program">School Program</label>
+                    <input type="text" id="program" placeholder="e.g., Computer Science">
+                </div>
+
+                <div class="form-group">
+                    <label for="advisorEmail">Advisor Email</label>
+                    <input type="email" id="advisorEmail" placeholder="advisor@school.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="internship" class="required">Internship Track</label>
+                    <select id="internship">
+                        <option value="">-- Select Track --</option>
+                        <option value="devops">DevOps</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="finance">Finance</option>
+                        <option value="operations">Operations</option>
+                        <option value="qa">QA</option>
+                    </select>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToPage(1)">← BACK</button>
+                <button class="btn-primary" onclick="goToPage(3)">NEXT STEP →</button>
+            </div>
+        </div>
+
+        <!-- PAGE 3: Quiz Questions -->
+        <div class="page">
+            <div class="progress-bar">
+                📚 Step 2 of 3 — 66% Complete
+            </div>
+            <div class="page-header">
+                <div class="page-title">📚 QUIZ QUESTIONS</div>
+                <div class="page-subtitle">Test your knowledge</div>
+            </div>
+            <div class="page-content">
+                <div class="question-card">
+                    <div class="question-title">Q9: Why is it important to keep email addresses confidential?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="q9" value="a">
+                            <span>To prevent spam and unsolicited emails</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="q9" value="b">
+                            <span>To keep email addresses confidential from other recipients</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="q9" value="c">
+                            <span>To reduce email server load</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="q9" value="d">
+                            <span>None of the above</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">Q10: What is the main difference between Cc and Bcc?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="q10" value="a">
+                            <span>Cc allows recipients to see each other, Bcc hides them</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="q10" value="b">
+                            <span>Cc is faster than Bcc</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="q10" value="c">
+                            <span>Bcc is for urgent emails only</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="q10" value="d">
+                            <span>There is no difference</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToPage(2)">← BACK</button>
+                <button class="btn-primary" onclick="goToPage(4)">REVIEW & SUBMIT →</button>
+            </div>
+        </div>
+
+        <!-- PAGE 4: Review & Submit -->
+        <div class="page">
+            <div class="progress-bar">
+                🔍 Step 3 of 3 — 100% Complete
+            </div>
+            <div class="page-header">
+                <div class="page-title">🔍 REVIEW YOUR ANSWERS</div>
+                <div class="page-subtitle">Make sure everything looks good</div>
+            </div>
+            <div class="page-content">
+                <div style="background: var(--light-gray); padding: var(--sp-l); border-radius: 8px; margin-bottom: var(--sp-l);">
+                    <h3 style="font-size: 14px; font-weight: 600; margin-bottom: var(--sp-m);">Your Information:</h3>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: var(--sp-s);">✓ <strong>Name:</strong> <span id="reviewName">John Doe</span></p>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: var(--sp-s);">✓ <strong>School:</strong> <span id="reviewSchool">Altschool Africa</span></p>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: var(--sp-s);">✓ <strong>Email:</strong> <span id="reviewEmail">john@school.com</span></p>
+                    <p style="font-size: 13px; color: var(--text-secondary);">✓ <strong>Internship:</strong> <span id="reviewInternship">DevOps</span></p>
+                </div>
+
+                <div style="background: var(--light-gray); padding: var(--sp-l); border-radius: 8px; margin-bottom: var(--sp-l);">
+                    <h3 style="font-size: 14px; font-weight: 600; margin-bottom: var(--sp-m);">Quiz Answers:</h3>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: var(--sp-s);">Q9: [Your selected answer]</p>
+                    <p style="font-size: 13px; color: var(--text-secondary);">Q10: [Your selected answer]</p>
+                </div>
+
+                <div style="display: flex; gap: var(--sp-m); padding: var(--sp-l); background: #f0f7ff; border-radius: 8px; align-items: center;">
+                    <input type="checkbox" id="confirm" style="width: 20px; height: 20px;">
+                    <label for="confirm" style="margin: 0; font-size: 13px; color: var(--text-primary);">
+                        I confirm the above information is correct and I'm ready to submit
+                    </label>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToPage(3)">← BACK</button>
+                <button class="btn-primary" onclick="goToPage(5)">SUBMIT QUIZ ✓</button>
+            </div>
+        </div>
+
+        <!-- PAGE 5: Success Confirmation -->
+        <div class="page">
+            <div class="page-content" style="padding: var(--sp-xxl);">
+                <div class="success-card">
+                    <div class="success-icon">✅</div>
+                    <div class="success-title">Quiz Submitted!</div>
+                    <div class="success-message">
+                        Thank you! Your quiz has been successfully submitted. Your responses have been saved and will be automatically scored.
+                    </div>
+
+                    <div class="next-steps">
+                        <h3>📊 What happens next?</h3>
+                        <p>Your responses have been saved to Baserow and our automated system will:</p>
+                        <ul style="margin-left: var(--sp-l); color: var(--text-secondary); font-size: 13px;">
+                            <li style="margin-bottom: var(--sp-s);">✓ Calculate your score automatically</li>
+                            <li style="margin-bottom: var(--sp-s);">✓ Post results to Mattermost within 5 minutes</li>
+                            <li>✓ Send you a notification with feedback</li>
+                        </ul>
+                        <p style="margin-top: var(--sp-l); font-size: 12px; color: var(--text-secondary);">
+                            <strong>Questions?</strong> Contact your advisor: advisor@school.com
+                        </p>
+                    </div>
+
+                    <!-- Mattermost Preview -->
+                    <div class="mattermost-card">
+                        <div class="mattermost-title">🎉 How your results will appear in Mattermost:</div>
+                        <div class="mattermost-field">🎉 NEW QUIZ SUBMISSION</div>
+                        <div class="mattermost-field">📋 Quiz: Finance & AI Orientation</div>
+                        <div class="mattermost-field">👤 Name: John Doe</div>
+                        <div class="mattermost-field">📧 Email: john@school.com</div>
+                        <div class="mattermost-field">🏢 School: Altschool Africa</div>
+                        <div class="mattermost-field">🔗 Internship: DevOps</div>
+                        <div class="mattermost-field">✅ Status: Submitted</div>
+                        <div class="mattermost-field">⏰ Time: Sept 19, 2026 10:30 AM</div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToPage(1)">← BACK TO START</button>
+                <button class="btn-success" onclick="location.reload()">✓ DONE</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToPage(pageNum) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            pages[pageNum - 1].classList.add('active');
+
+            // Update review page with form data
+            if (pageNum === 4) {
+                document.getElementById('reviewName').textContent = 
+                    (document.getElementById('firstName').value || 'John') + ' ' +
+                    (document.getElementById('lastName').value || 'Doe');
+                document.getElementById('reviewSchool').textContent = 
+                    document.getElementById('schoolName').options[document.getElementById('schoolName').selectedIndex].text;
+                document.getElementById('reviewEmail').textContent = 
+                    document.getElementById('schoolEmail').value || 'john@school.com';
+                document.getElementById('reviewInternship').textContent = 
+                    document.getElementById('internship').options[document.getElementById('internship').selectedIndex].text;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
